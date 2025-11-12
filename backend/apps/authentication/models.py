@@ -35,8 +35,8 @@ class User(AbstractUser):
     last_activity = models.DateTimeField(null=True, blank=True, verbose_name="Last Activity")
     
     class Meta:
-        verbose_name = "사용자"
-        verbose_name_plural = "사용자"
+        verbose_name = "User"
+        verbose_name_plural = "Users"
         db_table = 'auth_user'
     
     def __str__(self):
@@ -91,8 +91,8 @@ class UserProfile(BaseModel):
     marketing_agreed = models.BooleanField(default=False, verbose_name="Marketing Agreement")
     
     class Meta:
-        verbose_name = "사용자 프로필"
-        verbose_name_plural = "사용자 프로필"
+        verbose_name = "User Profile"
+        verbose_name_plural = "User Profiles"
         db_table = 'user_profile'
     
     def __str__(self):

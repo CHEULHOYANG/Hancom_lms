@@ -2468,3 +2468,6 @@ INFO 2025-11-11 22:55:30,254 basehttp 8840 23328 "GET /admin/ HTTP/1.1" 200 3929
 INFO 2025-11-11 22:55:35,724 basehttp 8840 23328 "GET /api/docs/ HTTP/1.1" 200 18466
 INFO 2025-11-11 22:55:36,216 basehttp 8840 23328 "GET /api/schema/ HTTP/1.1" 200 111992
 INFO 2025-11-11 22:55:46,328 autoreload 8840 22664 E:\202511_11_LMS\backend\config\settings.py changed, reloading.
+INFO 2025-11-12 22:59:02,958 autoreload 5832 5172 Watching for file changes with StatReloader
+INFO 2025-11-12 23:07:38,799 autoreload 21000 19136 Watching for file changes with StatReloader
+INFO 2025-11-12 23:12:53,089 autoreload 24872 19092 Watching for file changes with StatReloader
