@@ -1,0 +1,20 @@
+@charset "utf-8";
+/* font */
+@import url("http://fonts.googleapis.com/earlyaccess/nanumgothic.css");
+@font-face { font-family: Nanum Gothic; src : url("/_font/NanumG.eot"); src : url("/_font/NanumG.eot?#iefix") format('embedded-opentype'), url("/_font/NanumG.woff") format("woff"); }
+/* reset */
+html { background: #FFF; font-family: Nanum Gothic, '³ª´®°íµñ', sans-serif; color: #767676 }
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, figure, figcaption, table { margin: 0; padding: 0 }
+table { border-collapse: collapse; border-spacing: 0 }
+fieldset, img { border: 0 }
+address, caption, cite, code, dfn, em, th, var { font-style: normal; font-weight: normal }
+ol, ul { list-style: none }
+caption, th { text-align: left }
+h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: normal }
+a, a:link, a:visited, a:active { text-decoration: none; color: #767676 }
+table { border-collapse: collapse; border-spacing: 0; }
+caption {display:none}
+/* ½ºÅµ³×ºñ */
+#skip_nav { position: absolute; top: -50px; left: 0; width: 100%; z-index: 999; }
+#skip_nav a { position: absolute; width: 100%; text-align: center; background: #458acf; color: #fff; height: 30px; display: block }
+#skip_nav a:focus { top: 50px; }

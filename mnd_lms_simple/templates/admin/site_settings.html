@@ -1,0 +1,122 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}사이트 설정 - MND LMS{% endblock %}
+
+{% block content %}
+<h1 class="page-title">?? 사이트 설정</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="card">
+        <h3>기본 정보</h3>
+        
+        <div class="form-group">
+            <label for="site_name">사이트명</label>
+            <input type="text" id="site_name" name="site_name" value="{{ settings.site_name }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="site_description">사이트 설명</label>
+            <textarea id="site_description" name="site_description" rows="3">{{ settings.site_description }}</textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="admin_email">관리자 이메일</label>
+            <input type="email" id="admin_email" name="admin_email" value="{{ settings.admin_email }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">대표 전화</label>
+            <input type="text" id="phone" name="phone" value="{{ settings.phone }}">
+        </div>
+        
+        <div class="form-group">
+            <label for="address">주소</label>
+            <textarea id="address" name="address" rows="2">{{ settings.address }}</textarea>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>홈페이지 설정</h3>
+        
+        <div class="form-group">
+            <label for="hero_title">메인 타이틀</label>
+            <input type="text" id="hero_title" name="hero_title" value="{{ settings.hero_title }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="hero_subtitle">메인 서브타이틀</label>
+            <input type="text" id="hero_subtitle" name="hero_subtitle" value="{{ settings.hero_subtitle }}">
+        </div>
+    </div>
+
+    <div class="card">
+        <h3>기능 설정</h3>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="allow_registration" {% if settings.allow_registration %}checked{% endif %}>
+                회원가입 허용
+            </label>
+        </div>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="email_verification" {% if settings.email_verification %}checked{% endif %}>
+                이메일 인증 필요
+            </label>
+        </div>
+        
+        <div class="form-group">
+            <label>
+                <input type="checkbox" name="maintenance_mode" {% if settings.maintenance_mode %}checked{% endif %}>
+                점검 모드 활성화
+            </label>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 2rem;">
+        <button type="submit" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+            ? 설정 저장
+        </button>
+        <a href="/admin-dashboard/" class="btn btn-secondary" style="padding: 1rem 2rem; font-size: 1.1rem; margin-left: 1rem;">
+            취소
+        </a>
+    </div>
+</form>
+
+<div class="card" style="margin-top: 2rem;">
+    <h3>현재 설정 정보</h3>
+    <table>
+        <tr>
+            <th>항목</th>
+            <th>값</th>
+        </tr>
+        <tr>
+            <td>사이트명</td>
+            <td>{{ settings.site_name }}</td>
+        </tr>
+        <tr>
+            <td>관리자 이메일</td>
+            <td>{{ settings.admin_email }}</td>
+        </tr>
+        <tr>
+            <td>회원가입 허용</td>
+            <td>{% if settings.allow_registration %}? 허용{% else %}? 차단{% endif %}</td>
+        </tr>
+        <tr>
+            <td>이메일 인증</td>
+            <td>{% if settings.email_verification %}? 필요{% else %}? 불필요{% endif %}</td>
+        </tr>
+        <tr>
+            <td>점검 모드</td>
+            <td>{% if settings.maintenance_mode %}?? 활성화{% else %}? 비활성화{% endif %}</td>
+        </tr>
+        <tr>
+            <td>최종 수정일</td>
+            <td>{{ settings.updated_at|date:"Y-m-d H:i:s" }}</td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

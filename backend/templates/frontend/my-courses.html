@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>?‚´ ê°•ì˜ - êµ?ë°©ë?? ?•™?Šµê´?ë¦¬ì‹œ?Š¤?…œ</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #374151 100%);
+            color: white;
+            padding: 1rem 0;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        .logo h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .course-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .course-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .course-progress {
+            background: #e5e7eb;
+            border-radius: 10px;
+            height: 10px;
+            margin: 1rem 0;
+        }
+        .course-progress-bar {
+            background: #1e3a8a;
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+        .continue-btn {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>êµ?ë°©ë?? LMS</h1>
+            </div>
+            <div class="nav-links">
+                <a href="/frontend/dashboard.html">????‹œë³´ë“œ</a>
+                <a href="/frontend/courses.html">ê°•ì˜ëª©ë¡</a>
+                <a href="/frontend/my-courses.html">?‚´ ê°•ì˜</a>
+                <a href="/frontend/profile.html">?”„ë¡œí•„</a>
+                <a href="#" onclick="logout()">ë¡œê·¸?•„?›ƒ</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>?‚´ ê°•ì˜</h2>
+        <div id="myCoursesContainer">
+            <div class="loading">?‚´ ê°•ì˜ë¥? ë¶ˆëŸ¬?˜¤?Š” ì¤?...</div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            window.location.href = '/frontend/login.html';
+        }
+
+        async function loadMyCourses() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = '/frontend/login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/enrollments/my-courses/', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if (response.ok) {
+                    const courses = await response.json();
+                    displayMyCourses(courses);
+                } else {
+                    document.getElementById('myCoursesContainer').innerHTML = '<div class="loading">ê°•ì˜ë¥? ë¶ˆëŸ¬?˜¬ ?ˆ˜ ?—†?Šµ?‹ˆ?‹¤.</div>';
+                }
+            } catch (error) {
+                console.error('Error loading courses:', error);
+                document.getElementById('myCoursesContainer').innerHTML = '<div class="loading">?˜¤ë¥˜ê?? ë°œìƒ?–ˆ?Šµ?‹ˆ?‹¤.</div>';
+            }
+        }
+
+        function displayMyCourses(courses) {
+            const container = document.getElementById('myCoursesContainer');
+            
+            if (courses.length === 0) {
+                container.innerHTML = '<div class="loading">?ˆ˜ê°? ì¤‘ì¸ ê°•ì˜ê°? ?—†?Šµ?‹ˆ?‹¤.</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+
+            courses.forEach(enrollment => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'course-card';
+                courseCard.innerHTML = 
+                    <h3 class="course-title"></h3>
+                    <p></p>
+                    <div class="course-progress">
+                        <div class="course-progress-bar" style="width: %"></div>
+                    </div>
+                    <p>ì§„í–‰ë¥?: %</p>
+                    <button class="continue-btn" onclick="continueCourse()">
+                        ê°•ì˜ ê³„ì†?•˜ê¸?
+                    </button>
+                ;
+                container.appendChild(courseCard);
+            });
+        }
+
+        function continueCourse(courseId) {
+            alert('ê°•ì˜ ë·°ì–´ ê¸°ëŠ¥??? ì¤?ë¹? ì¤‘ì…?‹ˆ?‹¤.');
+        }
+
+        document.addEventListener('DOMContentLoaded', loadMyCourses);
+    </script>
+</body>
+</html>

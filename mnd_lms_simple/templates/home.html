@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>국방부 학습관리시스템</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #374151 100%);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-menu li a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .nav-menu li a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 1px solid white;
+        }
+        
+        .btn-outline:hover {
+            background: white;
+            color: #1e3a8a;
+        }
+        
+        .btn-primary {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #b91c1c;
+            transform: translateY(-2px);
+        }
+        
+        /* Slideshow */
+        .slideshow-container {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+        
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        
+        .slide.active {
+            opacity: 1;
+        }
+        
+        .slide1 {
+            background: linear-gradient(rgba(30, 58, 138, 0.8), rgba(30, 58, 138, 0.8)), 
+                        #1e3a8a;
+        }
+        
+        .slide2 {
+            background: linear-gradient(rgba(55, 65, 81, 0.8), rgba(55, 65, 81, 0.8)), 
+                        #374151;
+        }
+        
+        .slide-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .slide-content p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .content-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .content-section h3 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .course-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .course-item:last-child {
+            border-bottom: none;
+        }
+        
+        .course-item h4 {
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+        
+        .course-meta {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #10b981;
+            border-radius: 4px;
+        }
+        
+        .review-item {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+        
+        .review-rating {
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+        
+        .review-text {
+            font-style: italic;
+            color: #4b5563;
+        }
+        
+        .review-author {
+            font-size: 0.9rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #1f2937;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        /* Messages */
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+        
+        .messages li {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+        }
+        
+        .messages .success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        
+        .messages .error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fca5a5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">
+                🎖️ 국방부 학습관리시스템
+            </div>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="/course-registration/">수강신청</a></li>
+                    <li><a href="/community/">학습커뮤니티</a></li>
+                    <li><a href="/support/">고객센터</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="/my-courses/">나의수강</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <div class="auth-section">
+                {% if user.is_authenticated %}
+                <div class="user-info">
+                    <span>👤 {{ user.first_name|default:user.username }}님</span>
+                    <a href="/logout/" class="btn btn-outline">로그아웃</a>
+                </div>
+                {% else %}
+                <div class="auth-buttons">
+                    <a href="/login/" class="btn btn-outline">로그인</a>
+                    <a href="/register/" class="btn btn-primary">회원가입</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="main-content">
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Slideshow -->
+    <section class="slideshow-container">
+        <div class="slide slide1 active">
+            <div class="slide-content">
+                <h2>🛡️ 차세대 학습 환경</h2>
+                <p>종합적인 기술 개발을 위한 혁신적인 교육 기술</p>
+            </div>
+        </div>
+        <div class="slide slide2">
+            <div class="slide-content">
+                <h2>🎯 국방교육의 우수성</h2>
+                <p>전문적인 발전을 위한 첨단 교육 훈련 및 교육 시스템</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-grid">
+            <!-- 수강후기 -->
+            <section class="content-section">
+                <h3>📝 수강후기</h3>
+                <div class="review-item">
+                    <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                    <div class="review-text">"포괄적인 내용으로 구성된 우수한 교육 프로그램."</div>
+                    <div class="review-author">- 김대령</div>
+                </div>
+                <div class="review-item">
+                    <div class="review-rating">⭐⭐⭐⭐⭐</div>
+                    <div class="review-text">"최고 수준의 전문성 개발 과정."</div>
+                    <div class="review-author">- 이소령</div>
+                </div>
+                <div class="review-item">
+                    <div class="review-rating">⭐⭐⭐⭐</div>
+                    <div class="review-text">"커리어 발전을 위해 적극 추천."</div>
+                    <div class="review-author">- 박대위</div>
+                </div>
+            </section>
+
+            <!-- 신규강의 -->
+            <section class="content-section">
+                <h3>🆕 신규강의</h3>
+                <div class="course-item">
+                    <h4>고급 전략 기획</h4>
+                    <div class="course-meta">기간: 8주 | 수준: 고급</div>
+                </div>
+                <div class="course-item">
+                    <h4>사이버보안 기초</h4>
+                    <div class="course-meta">기간: 6주 | 수준: 중급</div>
+                </div>
+                <div class="course-item">
+                    <h4>위기관리 리더십</h4>
+                    <div class="course-meta">기간: 4주 | 수준: 전문가</div>
+                </div>
+                <div class="course-item">
+                    <h4>국제관계론</h4>
+                    <div class="course-meta">기간: 10주 | 수준: 고급</div>
+                </div>
+            </section>
+
+            <!-- 개인화 섹션 -->
+            <section class="content-section">
+                {% if user.is_authenticated %}
+                <h3>📊 나의 학습현황</h3>
+                
+                <h4 style="margin-bottom: 1rem; color: #059669;">📚 수강중인 강의</h4>
+                {% for course in current_courses %}
+                <div class="course-item">
+                    <h4>{{ course.title }}</h4>
+                    <div class="course-meta">강사: {{ course.instructor }} | 진도: {{ course.progress }}%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ course.progress }}%"></div>
+                    </div>
+                </div>
+                {% endfor %}
+                
+                {% if completed_courses %}
+                <h4 style="margin: 2rem 0 1rem 0; color: #0ea5e9;">🏆 수강완료</h4>
+                {% for course in completed_courses %}
+                <div class="course-item">
+                    <h4>{{ course.title }}</h4>
+                    <div class="course-meta">완료일: {{ course.completion_date }} | 점수: {{ course.score }}점</div>
+                </div>
+                {% endfor %}
+                {% endif %}
+                
+                {% else %}
+                <h3>⭐ 추천강의</h3>
+                {% for course in recommended_courses %}
+                <div class="course-item">
+                    <h4>{{ course.title }}</h4>
+                    <div class="course-meta">{{ course.description }}</div>
+                </div>
+                {% endfor %}
+                {% endif %}
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Ministry of National Defense Learning Management System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Slideshow functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[index].classList.add('active');
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+        
+        // Auto-advance slideshow
+        setInterval(nextSlide, 5000);
+        
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>

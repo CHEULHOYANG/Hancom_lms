@@ -1,0 +1,151 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}회원 상세정보 - MND LMS{% endblock %}
+
+{% block content %}
+<h1 class="page-title">? 회원 상세정보</h1>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <div class="card">
+        <h3>기본 정보</h3>
+        <table>
+            <tr>
+                <th>사용자명</th>
+                <td><strong>{{ user_obj.username }}</strong></td>
+            </tr>
+            <tr>
+                <th>실명</th>
+                <td>{{ user_obj.real_name|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>이메일</th>
+                <td>{{ user_obj.email|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>전화번호</th>
+                <td>{{ user_obj.phone|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>등급</th>
+                <td>{{ user_obj.get_grade_display }}</td>
+            </tr>
+            <tr>
+                <th>가입일</th>
+                <td>{{ user_obj.date_joined|date:"Y-m-d H:i:s" }}</td>
+            </tr>
+            <tr>
+                <th>최종 수정일</th>
+                <td>{{ user_obj.updated_at|date:"Y-m-d H:i:s" }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>활동 정보</h3>
+        <table>
+            <tr>
+                <th>계정 상태</th>
+                <td>
+                    {% if user_obj.is_active %}
+                        <span style="color: green;">? 활성</span>
+                    {% else %}
+                        <span style="color: red;">? 비활성</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>권한</th>
+                <td>
+                    {% if user_obj.is_superuser %}
+                        <span style="color: red;">? 슈퍼유저</span>
+                    {% elif user_obj.is_staff %}
+                        <span style="color: blue;">??? 관리자</span>
+                    {% else %}
+                        <span>? 일반사용자</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>로그인 횟수</th>
+                <td>{{ user_obj.login_count }}회</td>
+            </tr>
+            <tr>
+                <th>총 학습시간</th>
+                <td>
+                    {% with hours=user_obj.total_study_time|floatformat:0|add:0 %}
+                    {% widthratio hours 60 1 %}시간 {% widthratio hours 60 1|add:0|stringformat:"d"|add:hours|add:-60|default:0 %}분
+                    {% endwith %}
+                </td>
+            </tr>
+            <tr>
+                <th>최종 로그인 IP</th>
+                <td>{{ user_obj.last_login_ip|default:"-" }}</td>
+            </tr>
+            <tr>
+                <th>최종 로그인</th>
+                <td>{{ user_obj.last_login|date:"Y-m-d H:i:s"|default:"-" }}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3>수강 현황 ({{ enrollments.count }}건)</h3>
+    </div>
+
+    {% if enrollments %}
+    <table>
+        <thead>
+            <tr>
+                <th>강좌명</th>
+                <th>카테고리</th>
+                <th>상태</th>
+                <th>진도율</th>
+                <th>신청일</th>
+                <th>완료일</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enrollment in enrollments %}
+            <tr>
+                <td>{{ enrollment.course.title }}</td>
+                <td>{{ enrollment.course.category.name }}</td>
+                <td>
+                    {% if enrollment.status == 'approved' %}? 승인됨
+                    {% elif enrollment.status == 'pending' %}? 대기중
+                    {% elif enrollment.status == 'completed' %}?? 완료
+                    {% else %}? 거절됨{% endif %}
+                </td>
+                <td>
+                    <div style="background: #e5e7eb; border-radius: 10px; height: 20px; position: relative;">
+                        <div style="background: #1e3a8a; border-radius: 10px; height: 100%; width: {{ enrollment.progress }}%;"></div>
+                        <span style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 0.8rem; color: white; line-height: 20px;">{{ enrollment.progress }}%</span>
+                    </div>
+                </td>
+                <td>{{ enrollment.enrolled_at|date:"Y-m-d" }}</td>
+                <td>{{ enrollment.completed_at|date:"Y-m-d"|default:"-" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; color: #6b7280; padding: 2rem;">아직 수강 신청한 강좌가 없습니다.</p>
+    {% endif %}
+</div>
+
+<div style="text-align: center; margin-top: 2rem;">
+    <a href="/admin/auth/user/{{ user_obj.id }}/change/" class="btn btn-primary" style="padding: 1rem 2rem; font-size: 1.1rem;">
+        ?? 회원정보 수정
+    </a>
+    <form method="post" action="/admin/users/{{ user_obj.id }}/reset-password/" style="display: inline;" onsubmit="return confirm('정말로 비밀번호를 초기화하시겠습니까?');">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-secondary" style="padding: 1rem 2rem; font-size: 1.1rem; margin-left: 1rem;">
+            ? 비밀번호 초기화
+        </button>
+    </form>
+    <a href="/admin/users/" class="btn btn-secondary" style="padding: 1rem 2rem; font-size: 1.1rem; margin-left: 1rem;">
+        ? 목록으로
+    </a>
+</div>
+{% endblock %}

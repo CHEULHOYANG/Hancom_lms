@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="ko">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>예스소프트 관리자모드입니다.</title>
+<link rel="stylesheet" type="text/css" href="default.css" />
+</head>
+<body>
+<div class="header">
+	<div class="top">
+		<div class="top_mem">
+			<span>회원검색</span>
+			<input type="text" title="검색어 입력" value="Memeber Name"  />
+			<a href="" class="btn_logout">로그아웃</a>
+		</div>
+	</div>
+	<div class="meWrap">
+		<h1><img src="img/logo.png" alt="예스소프트 관리자" /></h1>
+		<div class="menu">
+			<a href="" class="on">HOME</a><a href="">MENU1</a><a href="">MENU2</a><a href="">MENU3</a><a href="">MENU4</a><a href="">MENU5</a><a href="">MENU6</a><a href="">MENU7</a>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="aside">
+		<h2>사이트 기본설정</h2>
+		<dl class="as_menu">
+			<dt><a href="" class="on">디자인 스킨설정</a></dt>
+			<dd><a href="" class="on">WebFTP 이미지관리</a>
+				<a href="">카테고리1_1</a>
+				<a href="">WebFTP 이미지관리</a>
+				<a href="">카테고리1_1</a></dd>
+			<dt><a href="">디자인 스킨설정</a></dt>
+			<dd><a href="">WebFTP 이미지관리</a>
+				<a href="">카테고리1_1</a>
+				<a href="">WebFTP 이미지관리</a>
+				<a href="">카테고리1_1</a></dd>
+			<dt><a href="">디자인 스킨설정</a></dt>
+			<dt><a href="">디자인 스킨설정</a></dt>
+		</dl>
+		<div class="cs_cen">
+			<h3>고객센터</h3>
+			<span>070.7017.0727</span>
+			<p>Fax:02.6008.5307</p>
+			<p>Email:yesoft@paran.com</p>
+		</div>
+		<div class="sol_as">
+			<h3>솔루션 A/S</h3>
+			<a href="">솔루션AS 바로가기</a>		</div>
+		<div class="as_ban">
+			<a href=""><img src="img/as_ban.gif" /></a>		</div>
+	</div>
+	<div class="content">
+
+		<div class="schWrap">
+			<h3>검색</h3>
+			<div class="sch_area" style="line-height:40px">
+				<input class="inptxt1 w100" id="strsday" value="<%=strsday%>" name="strsday" readonly /> ~ <input class="inptxt1 w100" id="streday" value="<%=streday%>" name="streday" readonly /><br />
+				<select name="strPart" class="seltxt w200">
+                      <option value="uid" <%if strPart="uid" then response.write"selected" end if%>>아이디</option>
+					  <option value="uname" <%if strPart="uname" then response.write"selected" end if%>>이름</option>
+                </select>
+				<input type="text" id="strSearch" name="strSearch" class="inptxt" value="<%=strSearch%>" /></div>
+			<a href="javascript:go2Search();" class="btn_search">검색하기</a>		
+		</div>
+
+		<div class="schWrap1">
+			<h3>검색</h3>
+			<div class="sch_area1">
+				<select id="searchpart" name="searchpart" class="seltxt w200">
+					<option value="id" <%If request("searchpart") = "title" Then Response.write"selected" End if%>>아이디</option>
+                                      <option value="name" >이름</option>
+                                      <option value="email" >이메일</option>
+                                      <option value="tel1" >전화번호</option>
+                                      <option value="tel2" >핸드폰번호</option>
+				</select>
+				<input type="text" name="searchstr" id="searchstr" class="inptxt" value="<%=request("searchstr")%>" /></div>
+			<a href="javascript:document.go_search.submit();" class="btn_search1">검색</a>		
+		</div>
+
+		<div class="tbl_top">
+			<a href="popup_mk.asp" class="fbtn1">팝업창등록</a>	
+		</div>
+
+		<div class="tbl_top">
+			<select name="select" id="select2">
+				<option>2013</option>
+				<option>2012</option>
+			</select>
+			<span class="tbl_total"><strong class="fr">회원님</strong>의 마일리지 잔액 <strong class="fr">123</strong>건 <a href="list_excel.asp?gm=<%=request("gm")%>" class="sbtn">엑셀로저장하기</a></span>
+		</div>
+
+		<table class="tbl" style="width:100%">
+			<colgroup>
+			<col style="width:12%" />
+			<col style="width:17%" />
+			<col style="width:12%" />
+			<col style="width:17%" />
+			<col style="width:42%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th>구분</th>	
+					<th>날짜</th>
+					<th>포인트</th>
+					<th>포인트내용</th>	
+					<th>세부내역</th>								
+				</tr>				
+			</thead>
+			<tbody>
+				<tr>
+					<td><span class="mile bl">적립</span></td>
+					<td>2015.02.22</td>
+					<td><strong class="fb">20</strong></td>
+					<td>로그인</td>
+					<td class="tl">키드키즈 로그인~~</td>
+				</tr>
+				<tr>
+					<td><span class="mile">사용</span></td>
+					<td>2015.02.22</td>
+					<td><strong class="fb">20</strong></td>
+					<td>로그인</td>
+					<td class="tl">키드키즈 로그인~~</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="tbl_btm mb80">
+			<div class="paging">
+				<a href=""><img src="../rad_img/img/a_prev2.gif" alt="처음페이지"></a>
+				<a href=""><img src="../rad_img/img/a_prev1.gif" alt="이전페이지" /></a>
+				<strong>1</strong>
+				<a href="" class="num">2</a>
+				<a href="" class="num">3</a>
+				<a href="" class="num">4</a>
+				<a href="" class="num">5</a>
+				<a href=""><img src="../rad_img/img/a_next1.gif" alt="다음페이지"></a>			
+				<a href=""><img src="../rad_img/img/a_next2.gif" alt="마지막페이지"></a>			</div>
+			<div class="rbtn">
+				<a href="" class="btn">장바구니</a>
+				<a href="" class="btn trans">구매하기</a>			</div>
+		</div>
+		<div class="schWrap">
+			<h3>검색하기</h3>
+			<div class="sch_area">
+				<select name="select" class="seltxt" id="select2">
+					<option>2013</option>
+					<option>2012</option>
+				</select>
+				<select id="select" class="seltxt">
+					<option>12</option>
+					<option>11</option>
+				</select>
+				<select id="select" class="seltxt">
+					<option>30</option>
+					<option>29</option>
+				</select><br />
+				<select id="select" class="seltxt">
+					<option>2013</option>
+					<option>2012</option>
+				</select>
+				<input type="text" id="search_input" class="inptxt" /></div>
+			<a href="" class="btn_search">검색하기</a>		
+		</div>
+		<div class="tbl_top">
+			<select name="select" id="select2">
+				<option>2013</option>
+				<option>2012</option>
+			</select>
+			<span class="tbl_total"><strong class="fr">회원님</strong>의 마일리지 잔액 <strong class="fr">123</strong>건</span>		
+		</div>
+		<table class="tbl" style="width:100%">
+			<colgroup>
+			<col style="width:12%" />
+			<col style="width:17%" />
+			<col style="width:12%" />
+			<col style="width:17%" />
+			<col style="width:42%" />
+			</colgroup>
+			<thead>
+				<tr>
+					<th>구분</th>	
+					<th>날짜</th>
+					<th>포인트</th>
+					<th>포인트내용</th>	
+					<th>세부내역</th>								
+				</tr>				
+			</thead>
+			<tbody>
+				<tr>
+					<td><span class="mile bl">적립</span></td>
+					<td>2015.02.22</td>
+					<td><strong class="fb">20</strong></td>
+					<td>로그인</td>
+					<td class="tl">키드키즈 로그인~~</td>
+				</tr>
+				<tr>
+					<td><span class="mile">사용</span></td>
+					<td>2015.02.22</td>
+					<td><strong class="fb">20</strong></td>
+					<td>로그인</td>
+					<td class="tl">키드키즈 로그인~~</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="tbl_btm">
+			<div class="paging">
+				<a href=""><img src="/yes_rad/rad_img/img/a_prev2.gif" alt="처음페이지"></a>
+				<a href=""><img src="/yes_rad/rad_img/img/a_prev1.gif" alt="이전페이지" /></a>
+				<strong>1</strong>
+				<a href="" class="num">2</a>
+				<a href="" class="num">3</a>
+				<a href="" class="num">4</a>
+				<a href="" class="num">5</a>
+				<a href=""><img src="/yes_rad/rad_img/img/a_next1.gif" alt="다음페이지"></a>			
+				<a href=""><img src="/yes_rad/rad_img/img/a_next2.gif" alt="마지막페이지"></a>			
+			</div>
+			<div class="rbtn">
+				<a href="" class="btn">장바구니</a>
+				<a href="" class="btn trans">구매하기</a>			
+			</div>
+		</div>
+
+	</div>
+</div>
+</body>
+</html>

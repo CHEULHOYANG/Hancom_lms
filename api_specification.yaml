@@ -1,0 +1,524 @@
+openapi: 3.0.3
+info:
+  title: LMS API
+  description: Learning Management System API
+  version: 1.0.0
+  contact:
+    name: LMS Development Team
+    email: dev@lms.com
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Development server
+  - url: https://lms.example.com/api/v1
+    description: Production server
+
+security:
+  - bearerAuth: []
+
+paths:
+  # Authentication
+  /auth/login:
+    post:
+      tags: [Authentication]
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username:
+                  type: string
+                  example: "student001"
+                password:
+                  type: string
+                  format: password
+                  example: "password123"
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  refresh_token:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      summary: User logout
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful logout
+        '401':
+          description: Unauthorized
+
+  /auth/refresh:
+    post:
+      tags: [Authentication]
+      summary: Refresh access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [refresh_token]
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: New access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+
+  # Users
+  /users/profile:
+    get:
+      tags: [Users]
+      summary: Get user profile
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  # Courses
+  /courses:
+    get:
+      tags: [Courses]
+      summary: List courses
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Course list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  next:
+                    type: string
+                    nullable: true
+                  previous:
+                    type: string
+                    nullable: true
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Course'
+
+  /courses/{course_id}:
+    get:
+      tags: [Courses]
+      summary: Get course details
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Course details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseDetail'
+        '404':
+          description: Course not found
+
+  /courses/{course_id}/sections:
+    get:
+      tags: [Courses]
+      summary: Get course sections
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Course sections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Section'
+
+  # Enrollments
+  /enrollments:
+    get:
+      tags: [Enrollments]
+      summary: Get user enrollments
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User enrollments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Enrollment'
+    
+    post:
+      tags: [Enrollments]
+      summary: Enroll in course
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [course_id]
+              properties:
+                course_id:
+                  type: integer
+      responses:
+        '201':
+          description: Successfully enrolled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enrollment'
+        '400':
+          description: Already enrolled or course not available
+
+  # Payments
+  /payments/initiate:
+    post:
+      tags: [Payments]
+      summary: Initiate payment
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [course_id, payment_method]
+              properties:
+                course_id:
+                  type: integer
+                payment_method:
+                  type: string
+                  enum: [card, bank_transfer, free]
+      responses:
+        '200':
+          description: Payment initiated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+
+  # Notices
+  /notices:
+    get:
+      tags: [Notices]
+      summary: Get notices
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: Notice list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notice'
+
+  /notices/{notice_id}:
+    get:
+      tags: [Notices]
+      summary: Get notice detail
+      parameters:
+        - name: notice_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Notice detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notice'
+
+  # QnA
+  /qna:
+    get:
+      tags: [QnA]
+      summary: Get QnA list
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: QnA list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QnA'
+    
+    post:
+      tags: [QnA]
+      summary: Create QnA
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, content]
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+      responses:
+        '201':
+          description: QnA created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QnA'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        role:
+          type: string
+          enum: [student, instructor, admin]
+        created_at:
+          type: string
+          format: date-time
+
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        instructor:
+          type: string
+        price:
+          type: number
+          format: decimal
+        duration:
+          type: integer
+        image:
+          type: string
+          format: uri
+        category:
+          type: string
+        is_free:
+          type: boolean
+
+    CourseDetail:
+      allOf:
+        - $ref: '#/components/schemas/Course'
+        - type: object
+          properties:
+            detailed_description:
+              type: string
+            prerequisites:
+              type: string
+            learning_objectives:
+              type: array
+              items:
+                type: string
+            sections_count:
+              type: integer
+
+    Section:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        order:
+          type: integer
+        duration:
+          type: string
+        video_url:
+          type: string
+          format: uri
+        is_free:
+          type: boolean
+        completed:
+          type: boolean
+
+    Enrollment:
+      type: object
+      properties:
+        id:
+          type: integer
+        course:
+          $ref: '#/components/schemas/Course'
+        enrolled_at:
+          type: string
+          format: date-time
+        expires_at:
+          type: string
+          format: date-time
+        progress:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+
+    Payment:
+      type: object
+      properties:
+        id:
+          type: integer
+        order_id:
+          type: string
+        amount:
+          type: number
+          format: decimal
+        payment_method:
+          type: string
+        status:
+          type: string
+          enum: [pending, completed, failed, cancelled]
+        created_at:
+          type: string
+          format: date-time
+
+    Notice:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        is_important:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        views:
+          type: integer
+
+    QnA:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        answer:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [pending, answered]
+        created_at:
+          type: string
+          format: date-time
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: object

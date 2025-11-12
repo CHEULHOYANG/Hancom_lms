@@ -1,0 +1,147 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}관리자 대시보드 - MND LMS{% endblock %}
+
+{% block content %}
+<h1 class="page-title">? 관리자 대시보드</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ total_users }}</div>
+        <div class="stat-label">총 회원수</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ total_courses }}</div>
+        <div class="stat-label">총 강좌수</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ active_courses }}</div>
+        <div class="stat-label">활성 강좌</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ total_enrollments }}</div>
+        <div class="stat-label">총 수강신청</div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <div class="card">
+        <h3>? 강좌 현황</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>상태</th>
+                    <th>개수</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in course_stats %}
+                <tr>
+                    <td>
+                        {% if stat.status == 'published' %}? 운영중
+                        {% elif stat.status == 'draft' %}? 준비중
+                        {% elif stat.status == 'completed' %}?? 완료
+                        {% else %}?? 중단{% endif %}
+                    </td>
+                    <td>{{ stat.count }}개</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>? 수강신청 현황</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>상태</th>
+                    <th>개수</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in enrollment_stats %}
+                <tr>
+                    <td>
+                        {% if stat.status == 'approved' %}? 승인됨
+                        {% elif stat.status == 'pending' %}? 대기중
+                        {% elif stat.status == 'completed' %}?? 완료
+                        {% else %}? 거절됨{% endif %}
+                    </td>
+                    <td>{{ stat.count }}건</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <h3>? 최근 수강신청</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>학생</th>
+                <th>강좌</th>
+                <th>상태</th>
+                <th>신청일</th>
+                <th>진도율</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enrollment in recent_enrollments %}
+            <tr>
+                <td>{{ enrollment.student.username }}</td>
+                <td>{{ enrollment.course.title }}</td>
+                <td>
+                    {% if enrollment.status == 'approved' %}? 승인됨
+                    {% elif enrollment.status == 'pending' %}? 대기중
+                    {% elif enrollment.status == 'completed' %}?? 완료
+                    {% else %}? 거절됨{% endif %}
+                </td>
+                <td>{{ enrollment.enrolled_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ enrollment.progress }}%</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center; color: #6b7280;">최근 수강신청이 없습니다.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h3>? 최근 게시글</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>제목</th>
+                <th>게시판</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>조회수</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in recent_posts %}
+            <tr>
+                <td>
+                    {% if post.is_notice %}?{% endif %}
+                    {% if post.is_secret %}?{% endif %}
+                    {{ post.title|truncatechars:30 }}
+                </td>
+                <td>{{ post.board.name }}</td>
+                <td>{{ post.author.username }}</td>
+                <td>{{ post.created_at|date:"Y-m-d H:i" }}</td>
+                <td>{{ post.views }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center; color: #6b7280;">최근 게시글이 없습니다.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

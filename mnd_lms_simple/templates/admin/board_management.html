@@ -1,0 +1,131 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}게시판 관리 - MND LMS{% endblock %}
+
+{% block content %}
+<h1 class="page-title">? 게시판 관리</h1>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3>게시판 목록</h3>
+        <button onclick="showCreateForm()" class="btn btn-primary">? 새 게시판 생성</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>게시판명</th>
+                <th>유형</th>
+                <th>설명</th>
+                <th>게시글 수</th>
+                <th>정렬순서</th>
+                <th>상태</th>
+                <th>생성일</th>
+                <th>관리</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for board in boards %}
+            <tr>
+                <td><strong>{{ board.name }}</strong></td>
+                <td>
+                    {% if board.board_type == 'notice' %}? 공지사항
+                    {% elif board.board_type == 'free' %}? 자유게시판
+                    {% elif board.board_type == 'qna' %}? Q&A
+                    {% elif board.board_type == 'event' %}? 이벤트
+                    {% else %}{{ board.get_board_type_display }}{% endif %}
+                </td>
+                <td>{{ board.description|truncatechars:50|default:"-" }}</td>
+                <td>
+                    <a href="/admin/posts/{{ board.id }}/" style="text-decoration: none;">
+                        {{ board.post_count }}개
+                    </a>
+                </td>
+                <td>{{ board.order }}</td>
+                <td>
+                    {% if board.is_active %}
+                        <span style="color: green;">? 활성</span>
+                    {% else %}
+                        <span style="color: red;">? 비활성</span>
+                    {% endif %}
+                </td>
+                <td>{{ board.created_at|date:"Y-m-d" }}</td>
+                <td>
+                    <a href="/admin/posts/{{ board.id }}/" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">게시글</a>
+                    <a href="/admin/mnd_lms_simple/board/{{ board.id }}/change/" class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">편집</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8" style="text-align: center; color: #6b7280; padding: 2rem;">
+                    등록된 게시판이 없습니다.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- 게시판 생성 폼 -->
+<div id="createForm" class="card" style="display: none;">
+    <h3>새 게시판 생성</h3>
+    
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="create">
+        
+        <div class="form-group">
+            <label for="name">게시판명 *</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="board_type">게시판 유형 *</label>
+            <select id="board_type" name="board_type" required>
+                <option value="">선택하세요</option>
+                {% for value, label in board_type_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="description">설명</label>
+            <textarea id="description" name="description" rows="3"></textarea>
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <button type="submit" class="btn btn-primary">? 생성</button>
+            <button type="button" onclick="hideCreateForm()" class="btn btn-secondary" style="margin-left: 1rem;">취소</button>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <h3>게시판 유형별 현황</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+        {% for value, label in board_type_choices %}
+        {% with count=boards|length %}
+        <div style="background: #f9fafb; padding: 1rem; border-radius: 5px; text-align: center;">
+            <div style="font-size: 1.5rem; font-weight: bold; color: #1e3a8a;">
+                {{ boards|length }}
+            </div>
+            <div style="font-size: 0.9rem; color: #6b7280;">{{ label }}</div>
+        </div>
+        {% endwith %}
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+function showCreateForm() {
+    document.getElementById('createForm').style.display = 'block';
+    document.querySelector('button[onclick="showCreateForm()"]').style.display = 'none';
+}
+
+function hideCreateForm() {
+    document.getElementById('createForm').style.display = 'none';
+    document.querySelector('button[onclick="showCreateForm()"]').style.display = 'inline-block';
+}
+</script>
+{% endblock %}

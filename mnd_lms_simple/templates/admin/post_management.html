@@ -1,0 +1,162 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}게시글 관리 - MND LMS{% endblock %}
+
+{% block content %}
+<h1 class="page-title">? 게시글 관리</h1>
+
+<div class="search-bar">
+    <form method="get" style="display: flex; gap: 1rem; align-items: end; width: 100%;">
+        <div class="form-group">
+            <label for="search">검색</label>
+            <input type="text" id="search" name="search" value="{{ search_query }}" placeholder="제목, 내용, 작성자 검색">
+        </div>
+        <div class="form-group">
+            <label for="board">게시판</label>
+            <select name="board" onchange="window.location.href='/admin/posts/' + this.value + '/'">
+                <option value="">전체 게시판</option>
+                {% for board in boards %}
+                <option value="{{ board.id }}" {% if current_board and current_board.id == board.id %}selected{% endif %}>
+                    {{ board.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">? 검색</button>
+        {% if search_query %}
+        <a href="{% if current_board %}/admin/posts/{{ current_board.id }}/{% else %}/admin/posts/{% endif %}" class="btn btn-secondary">초기화</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3>
+            게시글 목록 
+            {% if current_board %}
+            - {{ current_board.name }} ({{ page_obj.paginator.count }}개)
+            {% else %}
+            - 전체 ({{ page_obj.paginator.count }}개)
+            {% endif %}
+        </h3>
+        <a href="/admin/mnd_lms_simple/post/add/" class="btn btn-primary">? 새 게시글 작성</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>제목</th>
+                <th>게시판</th>
+                <th>작성자</th>
+                <th>조회수</th>
+                <th>작성일</th>
+                <th>수정일</th>
+                <th>관리</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in page_obj %}
+            <tr>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        {% if post.is_notice %}
+                            <span style="background: #dc2626; color: white; padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.7rem;">? 공지</span>
+                        {% endif %}
+                        {% if post.is_secret %}
+                            <span style="background: #6b7280; color: white; padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.7rem;">? 비밀</span>
+                        {% endif %}
+                        <span>{{ post.title|truncatechars:40 }}</span>
+                    </div>
+                </td>
+                <td>{{ post.board.name }}</td>
+                <td>{{ post.author.username }}</td>
+                <td>{{ post.views }}</td>
+                <td>{{ post.created_at|date:"Y-m-d H:i" }}</td>
+                <td>
+                    {% if post.updated_at != post.created_at %}
+                        {{ post.updated_at|date:"Y-m-d H:i" }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/admin/mnd_lms_simple/post/{{ post.id }}/change/" class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">편집</a>
+                    <a href="/admin/mnd_lms_simple/post/{{ post.id }}/delete/" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center; color: #6b7280; padding: 2rem;">
+                    {% if search_query %}
+                        검색 결과가 없습니다.
+                    {% else %}
+                        등록된 게시글이 없습니다.
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">&laquo; 처음</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">&lsaquo; 이전</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="current">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">다음 &rsaquo;</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">마지막 &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+{% if current_board %}
+<div class="card">
+    <h3>{{ current_board.name }} 게시판 정보</h3>
+    <table>
+        <tr>
+            <th>게시판명</th>
+            <td>{{ current_board.name }}</td>
+        </tr>
+        <tr>
+            <th>유형</th>
+            <td>{{ current_board.get_board_type_display }}</td>
+        </tr>
+        <tr>
+            <th>설명</th>
+            <td>{{ current_board.description|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>상태</th>
+            <td>
+                {% if current_board.is_active %}
+                    <span style="color: green;">? 활성</span>
+                {% else %}
+                    <span style="color: red;">? 비활성</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>생성일</th>
+            <td>{{ current_board.created_at|date:"Y-m-d H:i:s" }}</td>
+        </tr>
+    </table>
+    
+    <div style="text-align: center; margin-top: 1rem;">
+        <a href="/admin/mnd_lms_simple/board/{{ current_board.id }}/change/" class="btn btn-primary">게시판 설정 수정</a>
+        <a href="/admin/boards/" class="btn btn-secondary" style="margin-left: 1rem;">게시판 관리로</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

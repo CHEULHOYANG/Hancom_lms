@@ -1,0 +1,247 @@
+# Django 한글 번역 파일
+# Copyright (C) 2024 국방부 LMS
+msgid ""
+msgstr ""
+"Project-Id-Version: 국방부 LMS\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: Admin\n"
+"Language-Team: Korean\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+# Django Admin 기본 번역
+msgid "Administration"
+msgstr "관리"
+
+msgid "Home"
+msgstr "홈"
+
+msgid "Change password"
+msgstr "비밀번호 변경"
+
+msgid "Log out"
+msgstr "로그아웃"
+
+msgid "Add"
+msgstr "추가"
+
+msgid "Change"
+msgstr "변경"
+
+msgid "Delete"
+msgstr "삭제"
+
+msgid "View"
+msgstr "보기"
+
+msgid "Save"
+msgstr "저장"
+
+msgid "Save and add another"
+msgstr "저장하고 다른 것 추가"
+
+msgid "Save and continue editing"
+msgstr "저장하고 계속 편집"
+
+msgid "Save as new"
+msgstr "새 항목으로 저장"
+
+msgid "Delete selected %(verbose_name_plural)s"
+msgstr "선택된 %(verbose_name_plural)s 삭제"
+
+msgid "History"
+msgstr "히스토리"
+
+msgid "The %(name)s \"%(obj)s\" was added successfully."
+msgstr "%(name)s \"%(obj)s\"이(가) 성공적으로 추가되었습니다."
+
+msgid "The %(name)s \"%(obj)s\" was changed successfully."
+msgstr "%(name)s \"%(obj)s\"이(가) 성공적으로 변경되었습니다."
+
+msgid "The %(name)s \"%(obj)s\" was deleted successfully."
+msgstr "%(name)s \"%(obj)s\"이(가) 성공적으로 삭제되었습니다."
+
+msgid "Search"
+msgstr "검색"
+
+msgid "Filter"
+msgstr "필터"
+
+msgid "All"
+msgstr "전체"
+
+msgid "Any date"
+msgstr "모든 날짜"
+
+msgid "Today"
+msgstr "오늘"
+
+msgid "Past 7 days"
+msgstr "지난 7일"
+
+msgid "This month"
+msgstr "이번 달"
+
+msgid "This year"
+msgstr "올해"
+
+msgid "Yes"
+msgstr "예"
+
+msgid "No"
+msgstr "아니오"
+
+msgid "Unknown"
+msgstr "알 수 없음"
+
+msgid "Date/time"
+msgstr "날짜/시간"
+
+msgid "User"
+msgstr "사용자"
+
+msgid "Action"
+msgstr "작업"
+
+msgid "Object"
+msgstr "객체"
+
+msgid "Summary"
+msgstr "요약"
+
+msgid "Recent actions"
+msgstr "최근 작업"
+
+msgid "My actions"
+msgstr "내 작업"
+
+msgid "None available"
+msgstr "사용 가능한 항목 없음"
+
+msgid "Site administration"
+msgstr "사이트 관리"
+
+msgid "Groups"
+msgstr "그룹"
+
+msgid "Users"
+msgstr "사용자"
+
+msgid "Password"
+msgstr "비밀번호"
+
+msgid "Username"
+msgstr "사용자명"
+
+msgid "Email address"
+msgstr "이메일 주소"
+
+msgid "First name"
+msgstr "이름"
+
+msgid "Last name"
+msgstr "성"
+
+msgid "Active"
+msgstr "활성"
+
+msgid "Staff status"
+msgstr "스태프 권한"
+
+msgid "Superuser status"
+msgstr "슈퍼유저 권한"
+
+msgid "Last login"
+msgstr "마지막 로그인"
+
+msgid "Date joined"
+msgstr "가입일"
+
+msgid "Personal info"
+msgstr "개인 정보"
+
+msgid "Permissions"
+msgstr "권한"
+
+msgid "Important dates"
+msgstr "중요한 날짜"
+
+msgid "Available"
+msgstr "사용 가능"
+
+msgid "Chosen"
+msgstr "선택됨"
+
+msgid "Choose all"
+msgstr "모두 선택"
+
+msgid "Remove all"
+msgstr "모두 제거"
+
+msgid "Authentication and Authorization"
+msgstr "인증 및 권한"
+
+msgid "Recent Actions"
+msgstr "최근 작업"
+
+msgid "Django Administration"
+msgstr "Django 관리"
+
+msgid "Welcome,"
+msgstr "환영합니다,"
+
+msgid "View site"
+msgstr "사이트 보기"
+
+msgid "Documentation"
+msgstr "문서"
+
+msgid "Show all"
+msgstr "모두 보기"
+
+# 필드 관련 번역
+msgid "This field is required."
+msgstr "이 필드는 필수입니다."
+
+msgid "Enter a valid email address."
+msgstr "유효한 이메일 주소를 입력하세요."
+
+msgid "This field cannot be blank."
+msgstr "이 필드는 비워둘 수 없습니다."
+
+msgid "This field cannot be null."
+msgstr "이 필드는 null일 수 없습니다."
+
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr "유효한 선택을 하세요. 해당 선택은 사용 가능한 선택이 아닙니다."
+
+# 앱별 번역
+msgid "AUTHENTICATION"
+msgstr "인증"
+
+msgid "COURSES"
+msgstr "과정"
+
+# 사용자 정의 모델 번역
+msgid "User Profile"
+msgstr "사용자 프로필"
+
+msgid "Course Category"
+msgstr "과정 카테고리"
+
+msgid "Course"
+msgstr "과정"
+
+msgid "Course Section"
+msgstr "과정 섹션"
+
+msgid "Lesson"
+msgstr "레슨"
+
+msgid "Course Review"
+msgstr "과정 리뷰"

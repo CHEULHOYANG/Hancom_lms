@@ -1,0 +1,11 @@
+# -*- coding: utf-8 -*-
+"""
+Notices app configuration
+"""
+from django.apps import AppConfig
+
+
+class NoticesConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'apps.notices'
+    verbose_name = 'Notice Management'

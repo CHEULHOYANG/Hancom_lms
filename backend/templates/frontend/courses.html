@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ê°•ì˜ëª©ë¡ - êµ?ë°©ë?? ?•™?Šµê´?ë¦¬ì‹œ?Š¤?…œ</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #374151 100%);
+            color: white;
+            padding: 1rem 0;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        .logo h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .course-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .course-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        .course-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .free-badge {
+            background: #10b981;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        .start-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>êµ?ë°©ë?? LMS</h1>
+            </div>
+            <div class="nav-links">
+                <a href="/frontend/dashboard.html">????‹œë³´ë“œ</a>
+                <a href="/frontend/courses.html">ê°•ì˜ëª©ë¡</a>
+                <a href="/frontend/my-courses.html">?‚´ ê°•ì˜</a>
+                <a href="/frontend/profile.html">?”„ë¡œí•„</a>
+                <a href="#" onclick="logout()">ë¡œê·¸?•„?›ƒ</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>ê°•ì˜ ëª©ë¡</h2>
+        <div id="coursesContainer">
+            <div class="loading">ê°•ì˜ ëª©ë¡?„ ë¶ˆëŸ¬?˜¤?Š” ì¤?...</div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            window.location.href = '/frontend/login.html';
+        }
+
+        async function loadCourses() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = '/frontend/login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/courses/courses/', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if (response.ok) {
+                    const courses = await response.json();
+                    displayCourses(courses);
+                } else {
+                    document.getElementById('coursesContainer').innerHTML = '<div class="loading">ê°•ì˜ë¥? ë¶ˆëŸ¬?˜¬ ?ˆ˜ ?—†?Šµ?‹ˆ?‹¤.</div>';
+                }
+            } catch (error) {
+                console.error('Error loading courses:', error);
+                document.getElementById('coursesContainer').innerHTML = '<div class="loading">?˜¤ë¥˜ê?? ë°œìƒ?–ˆ?Šµ?‹ˆ?‹¤.</div>';
+            }
+        }
+
+        function displayCourses(courses) {
+            const container = document.getElementById('coursesContainer');
+            
+            if (courses.length === 0) {
+                container.innerHTML = '<div class="loading">?“±ë¡ëœ ê°•ì˜ê°? ?—†?Šµ?‹ˆ?‹¤.</div>';
+                return;
+            }
+
+            const coursesGrid = document.createElement('div');
+            coursesGrid.className = 'courses-grid';
+
+            courses.forEach(course => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'course-card';
+                courseCard.innerHTML = 
+                    <h3 class="course-title"></h3>
+                    <p class="course-description"></p>
+                    <div class="course-meta">
+                        <span>?‚œ?´?„: </span>
+                        <span>?‹œê°?: ?‹œê°?</span>
+                    </div>
+                    <div class="free-badge">ë¬´ë£Œ ê°•ì˜</div>
+                    <button class="start-btn" onclick="startCourse()">
+                        ?•™?Šµ ?‹œ?‘
+                    </button>
+                ;
+                coursesGrid.appendChild(courseCard);
+            });
+
+            container.innerHTML = '';
+            container.appendChild(coursesGrid);
+        }
+
+        async function startCourse(courseId) {
+            const token = localStorage.getItem('access_token');
+            
+            try {
+                const response = await fetch('/api/enrollments/enroll/', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        course_id: courseId
+                    })
+                });
+
+                if (response.ok) {
+                    alert('ê°•ì˜ ?“±ë¡ì´ ?™„ë£Œë˜?—ˆ?Šµ?‹ˆ?‹¤!');
+                    window.location.href = '/frontend/my-courses.html';
+                } else {
+                    alert('ê°•ì˜ ?“±ë¡ì— ?‹¤?Œ¨?–ˆ?Šµ?‹ˆ?‹¤.');
+                }
+            } catch (error) {
+                console.error('Error starting course:', error);
+                alert('?˜¤ë¥˜ê?? ë°œìƒ?–ˆ?Šµ?‹ˆ?‹¤.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadCourses);
+    </script>
+</body>
+</html>

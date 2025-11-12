@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .link-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        .link-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #667eea;
+        }
+        .link-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .version {
+            margin-top: 2rem;
+            color: #999;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Learning Management System</h1>
+        <p class="subtitle">Backend API Server</p>
+        
+        <div class="links">
+            <a href="{{ api_docs_url }}" class="link-card">
+                <div class="link-title">API Documentation</div>
+                <div class="link-desc">Swagger UI for API testing</div>
+            </a>
+            
+            <a href="{{ admin_url }}" class="link-card">
+                <div class="link-title">Admin Panel</div>
+                <div class="link-desc">Django admin interface</div>
+            </a>
+            
+            <a href="/api/redoc/" class="link-card">
+                <div class="link-title">ReDoc</div>
+                <div class="link-desc">API documentation (ReDoc)</div>
+            </a>
+            
+            <a href="/api/schema/" class="link-card">
+                <div class="link-title">API Schema</div>
+                <div class="link-desc">OpenAPI schema</div>
+            </a>
+        </div>
+        
+        <div class="version">Version {{ version }}</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1 @@
+web: gunicorn mnd_lms_simple.wsgi:application --bind 0.0.0.0:$PORT

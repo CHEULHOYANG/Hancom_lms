@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>?îÑÎ°úÌïÑ - Íµ?Î∞©Î?? ?ïô?äµÍ¥?Î¶¨Ïãú?ä§?Öú</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #374151 100%);
+            color: white;
+            padding: 1rem 0;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        .logo h1 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        .profile-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        .save-btn {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="nav-container">
+            <div class="logo">
+                <h1>Íµ?Î∞©Î?? LMS</h1>
+            </div>
+            <div class="nav-links">
+                <a href="/frontend/dashboard.html">????ãúÎ≥¥Îìú</a>
+                <a href="/frontend/courses.html">Í∞ïÏùòÎ™©Î°ù</a>
+                <a href="/frontend/my-courses.html">?Ç¥ Í∞ïÏùò</a>
+                <a href="/frontend/profile.html">?îÑÎ°úÌïÑ</a>
+                <a href="#" onclick="logout()">Î°úÍ∑∏?ïÑ?õÉ</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="profile-card">
+            <h2>?Ç¥ ?îÑÎ°úÌïÑ</h2>
+            <div id="profileContainer">
+                <div class="loading">?îÑÎ°úÌïÑ?ùÑ Î∂àÎü¨?ò§?äî Ï§?...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            window.location.href = '/frontend/login.html';
+        }
+
+        async function loadProfile() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = '/frontend/login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/auth/profile/', {
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    }
+                });
+
+                if (response.ok) {
+                    const profile = await response.json();
+                    displayProfile(profile);
+                } else {
+                    document.getElementById('profileContainer').innerHTML = '<div class="loading">?îÑÎ°úÌïÑ?ùÑ Î∂àÎü¨?ò¨ ?àò ?óÜ?äµ?ãà?ã§.</div>';
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                document.getElementById('profileContainer').innerHTML = '<div class="loading">?ò§Î•òÍ?? Î∞úÏÉù?ñà?äµ?ãà?ã§.</div>';
+            }
+        }
+
+        function displayProfile(profile) {
+            const container = document.getElementById('profileContainer');
+            container.innerHTML = 
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="username">?Ç¨?ö©?ûêÎ™?</label>
+                        <input type="text" id="username" value="" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">?ù¥Î©îÏùº</label>
+                        <input type="email" id="email" value="" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="first_name">?ù¥Î¶?</label>
+                        <input type="text" id="first_name" value="" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="last_name">?Ñ±</label>
+                        <input type="text" id="last_name" value="" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="date_joined">Í∞??ûÖ?ùº</label>
+                        <input type="text" value="" readonly>
+                    </div>
+                </form>
+            ;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProfile);
+    </script>
+</body>
+</html>

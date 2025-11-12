@@ -1,0 +1,213 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}강좌 관리 - MND LMS{% endblock %}
+
+{% block content %}
+<h1 class="page-title">? 강좌 관리</h1>
+
+<div class="search-bar">
+    <form method="get" style="display: flex; gap: 1rem; align-items: end; width: 100%;">
+        <div class="form-group">
+            <label for="search">검색</label>
+            <input type="text" id="search" name="search" value="{{ search_query }}" placeholder="강좌명, 강사명 검색">
+        </div>
+        <div class="form-group">
+            <label for="category">카테고리</label>
+            <select id="category" name="category">
+                <option value="">전체</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if category_filter == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="status">상태</label>
+            <select id="status" name="status">
+                <option value="">전체</option>
+                {% for value, label in status_choices %}
+                <option value="{{ value }}" {% if status_filter == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">? 검색</button>
+        {% if search_query or category_filter or status_filter %}
+        <a href="/admin/courses/" class="btn btn-secondary">초기화</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3>강좌 목록 (총 {{ page_obj.paginator.count }}개)</h3>
+        <a href="/admin/mnd_lms_simple/course/add/" class="btn btn-primary">? 새 강좌 추가</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>강좌명</th>
+                <th>카테고리</th>
+                <th>강사</th>
+                <th>레벨</th>
+                <th>상태</th>
+                <th>수강률</th>
+                <th>기간</th>
+                <th>가격</th>
+                <th>추천</th>
+                <th>관리</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in page_obj %}
+            <tr>
+                <td>
+                    <strong>{{ course.title|truncatechars:30 }}</strong>
+                    {% if course.is_featured %}
+                        <span style="background: #dc2626; color: white; padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.7rem; margin-left: 0.5rem;">? 추천</span>
+                    {% endif %}
+                </td>
+                <td>{{ course.category.name }}</td>
+                <td>{{ course.instructor }}</td>
+                <td>
+                    {% if course.level == 'beginner' %}? 초급
+                    {% elif course.level == 'intermediate' %}? 중급
+                    {% elif course.level == 'advanced' %}? 고급
+                    {% else %}? 전문가{% endif %}
+                </td>
+                <td>
+                    {% if course.status == 'published' %}? 운영중
+                    {% elif course.status == 'draft' %}? 준비중
+                    {% elif course.status == 'completed' %}?? 완료
+                    {% else %}?? 중단{% endif %}
+                </td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div style="background: #e5e7eb; border-radius: 10px; height: 20px; width: 60px; position: relative;">
+                            <div style="background: {% if course.get_enrollment_rate >= 80 %}#10b981{% elif course.get_enrollment_rate >= 50 %}#f59e0b{% else %}#ef4444{% endif %}; border-radius: 10px; height: 100%; width: {{ course.get_enrollment_rate }}%;"></div>
+                        </div>
+                        <span style="font-size: 0.8rem;">{{ course.current_students }}/{{ course.max_students }} ({{ course.get_enrollment_rate }}%)</span>
+                    </div>
+                </td>
+                <td>
+                    {{ course.duration_weeks }}주<br>
+                    <small style="color: #6b7280;">{{ course.start_date|date:"m/d" }} - {{ course.end_date|date:"m/d" }}</small>
+                </td>
+                <td>
+                    {% if course.price == 0 %}
+                        <span style="color: green; font-weight: bold;">무료</span>
+                    {% else %}
+                        {{ course.price|floatformat:0 }}원
+                    {% endif %}
+                </td>
+                <td>
+                    {% if course.is_featured %}
+                        <span style="color: #dc2626;">? 추천</span>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/admin/mnd_lms_simple/course/{{ course.id }}/change/" class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">편집</a>
+                    <a href="/admin/mnd_lms_simple/enrollment/?course__id__exact={{ course.id }}" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">수강생</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="10" style="text-align: center; color: #6b7280; padding: 2rem;">
+                    검색 결과가 없습니다.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">&laquo; 처음</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">&lsaquo; 이전</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="current">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">다음 &rsaquo;</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if status_filter %}&status={{ status_filter }}{% endif %}">마지막 &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <div class="card">
+        <h3>강좌 상태별 현황</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>상태</th>
+                    <th>개수</th>
+                    <th>비율</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value, label in status_choices %}
+                {% with count=page_obj.paginator.count %}
+                <tr>
+                    <td>
+                        {% if value == 'published' %}? {{ label }}
+                        {% elif value == 'draft' %}? {{ label }}
+                        {% elif value == 'completed' %}?? {{ label }}
+                        {% else %}?? {{ label }}{% endif %}
+                    </td>
+                    <td>{{ count }}개</td>
+                    <td>{% widthratio count page_obj.paginator.count 100 %}%</td>
+                </tr>
+                {% endwith %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>카테고리별 현황</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>카테고리</th>
+                    <th>강좌 수</th>
+                    <th>상태</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                <tr>
+                    <td>{{ category.name }}</td>
+                    <td>-개</td>
+                    <td>
+                        {% if category.is_active %}
+                            <span style="color: green;">? 활성</span>
+                        {% else %}
+                            <span style="color: red;">? 비활성</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" style="text-align: center; color: #6b7280;">등록된 카테고리가 없습니다.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div style="text-align: center; margin-top: 1rem;">
+            <a href="/admin/mnd_lms_simple/coursecategory/add/" class="btn btn-primary">새 카테고리 추가</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

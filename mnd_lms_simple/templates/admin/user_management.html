@@ -1,0 +1,128 @@
+{% extends 'admin/base_admin.html' %}
+
+{% block title %}회원관리 - MND LMS{% endblock %}
+
+{% block content %}
+<h1 class="page-title">? 회원관리</h1>
+
+<div class="search-bar">
+    <form method="get" style="display: flex; gap: 1rem; align-items: end; width: 100%;">
+        <div class="form-group">
+            <label for="search">검색</label>
+            <input type="text" id="search" name="search" value="{{ search_query }}" placeholder="사용자명, 실명, 이메일 검색">
+        </div>
+        <div class="form-group">
+            <label for="grade">등급</label>
+            <select id="grade" name="grade">
+                <option value="">전체</option>
+                {% for value, label in grade_choices %}
+                <option value="{{ value }}" {% if grade_filter == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">? 검색</button>
+        {% if search_query or grade_filter %}
+        <a href="/admin/users/" class="btn btn-secondary">초기화</a>
+        {% endif %}
+    </form>
+</div>
+
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <h3>회원 목록 (총 {{ page_obj.paginator.count }}명)</h3>
+        <a href="/admin/auth/user/add/" class="btn btn-primary">? 새 회원 추가</a>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>사용자명</th>
+                <th>실명</th>
+                <th>이메일</th>
+                <th>전화번호</th>
+                <th>등급</th>
+                <th>로그인수</th>
+                <th>학습시간</th>
+                <th>가입일</th>
+                <th>상태</th>
+                <th>관리</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user_obj in page_obj %}
+            <tr>
+                <td><strong>{{ user_obj.username }}</strong></td>
+                <td>{{ user_obj.get_masked_name|default:"-" }}</td>
+                <td>{{ user_obj.get_masked_email|default:"-" }}</td>
+                <td>{{ user_obj.get_masked_phone|default:"-" }}</td>
+                <td>
+                    <span class="badge">{{ user_obj.get_grade_display }}</span>
+                </td>
+                <td>{{ user_obj.login_count }}회</td>
+                <td>
+                    {% with hours=user_obj.total_study_time|floatformat:0|add:0 %}
+                    {% with h=hours|divisibleby:60 m=hours|add:0 %}
+                    {% widthratio hours 60 1 %}h {% widthratio hours 60 1|add:0|stringformat:"d"|add:hours|add:-60|default:0 %}m
+                    {% endwith %}
+                    {% endwith %}
+                </td>
+                <td>{{ user_obj.date_joined|date:"Y-m-d" }}</td>
+                <td>
+                    {% if user_obj.is_active %}
+                        <span style="color: green;">? 활성</span>
+                    {% else %}
+                        <span style="color: red;">? 비활성</span>
+                    {% endif %}
+                    {% if user_obj.is_staff %}
+                        <span style="color: blue;">??? 관리자</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="/admin/users/{{ user_obj.id }}/" class="btn btn-secondary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">상세</a>
+                    <a href="/admin/auth/user/{{ user_obj.id }}/change/" class="btn btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">편집</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="10" style="text-align: center; color: #6b7280; padding: 2rem;">
+                    검색 결과가 없습니다.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if grade_filter %}&grade={{ grade_filter }}{% endif %}">&laquo; 처음</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if grade_filter %}&grade={{ grade_filter }}{% endif %}">&lsaquo; 이전</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span class="current">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if grade_filter %}&grade={{ grade_filter }}{% endif %}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if grade_filter %}&grade={{ grade_filter }}{% endif %}">다음 &rsaquo;</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if grade_filter %}&grade={{ grade_filter }}{% endif %}">마지막 &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: #e5e7eb;
+    color: #374151;
+}
+</style>
+{% endblock %}
