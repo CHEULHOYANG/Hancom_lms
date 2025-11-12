@@ -45,21 +45,21 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('username', 'email', 'first_name', 'last_name')
     ordering = ('-date_joined',)
     
-    # Django admin 한글화
-    verbose_name = "사용자"
-    verbose_name_plural = "사용자 관리"
+    # Django admin settings
+    verbose_name = "User"
+    verbose_name_plural = "User Management"
     
     def masked_email(self, obj):
         return mask_email(obj.email)
-    masked_email.short_description = '이메일'
+    masked_email.short_description = 'Email'
     
     def masked_first_name(self, obj):
         return mask_name(obj.first_name)
-    masked_first_name.short_description = '이름'
+    masked_first_name.short_description = 'First Name'
     
     def masked_last_name(self, obj):
         return mask_name(obj.last_name)
-    masked_last_name.short_description = '성'
+    masked_last_name.short_description = 'Last Name'
 
 
 @admin.register(UserProfile)
@@ -69,10 +69,10 @@ class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'user__email', 'phone')
     readonly_fields = ('created_at', 'updated_at')
     
-    # Django admin 한글화
-    verbose_name = "사용자 프로필"
-    verbose_name_plural = "사용자 프로필 관리"
+    # Django admin settings  
+    verbose_name = "User Profile"
+    verbose_name_plural = "User Profile Management"
     
     def masked_phone(self, obj):
         return mask_phone(obj.phone)
-    masked_phone.short_description = '전화번호'
+    masked_phone.short_description = 'Phone Number'

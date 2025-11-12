@@ -2487,3 +2487,16 @@ INFO 2025-11-12 23:23:07,867 autoreload 22796 11792 Watching for file changes wi
 INFO 2025-11-12 23:23:07,895 autoreload 25980 27208 E:\Hancom_lms\backend\config\settings.py changed, reloading.
 INFO 2025-11-12 23:23:08,322 autoreload 14880 22924 Watching for file changes with StatReloader
 INFO 2025-11-12 23:23:20,098 autoreload 4124 21560 Watching for file changes with StatReloader
+INFO 2025-11-12 23:25:04,524 autoreload 12856 24728 Watching for file changes with StatReloader
+INFO 2025-11-12 23:25:22,984 autoreload 12856 24728 E:\Hancom_lms\backend\apps\authentication\admin.py changed, reloading.
+INFO 2025-11-12 23:25:23,436 autoreload 16136 21592 Watching for file changes with StatReloader
+INFO 2025-11-12 23:25:36,828 autoreload 16136 21592 E:\Hancom_lms\backend\config\settings.py changed, reloading.
+INFO 2025-11-12 23:25:37,339 autoreload 23032 14324 Watching for file changes with StatReloader
+INFO 2025-11-12 23:25:38,567 autoreload 23032 14324 E:\Hancom_lms\backend\apps\authentication\admin.py changed, reloading.
+INFO 2025-11-12 23:25:39,018 autoreload 26492 22940 Watching for file changes with StatReloader
+INFO 2025-11-12 23:25:48,311 autoreload 11352 28372 Watching for file changes with StatReloader
+INFO 2025-11-12 23:26:06,616 autoreload 26492 22940 E:\Hancom_lms\backend\apps\authentication\admin.py changed, reloading.
+INFO 2025-11-12 23:26:06,762 autoreload 11352 28372 E:\Hancom_lms\backend\apps\authentication\admin.py changed, reloading.
+INFO 2025-11-12 23:26:07,109 autoreload 27164 14424 Watching for file changes with StatReloader
+INFO 2025-11-12 23:26:07,235 autoreload 20516 1980 Watching for file changes with StatReloader
+INFO 2025-11-12 23:26:23,157 autoreload 18900 7256 Watching for file changes with StatReloader
