@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한컴 국방부 학습관리시스템 (Hancom MND LMS)</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>🎓 한컴 국방부 LMS</h1>
+                <p>Hancom Ministry of National Defense Learning Management System</p>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn" onclick="showSection('dashboard')">대시보드</button>
+                <button class="nav-btn" onclick="showSection('courses')">교육과정</button>
+                <button class="nav-btn" onclick="showSection('students')">학생관리</button>
+                <button class="nav-btn" onclick="showSection('instructors')">교관관리</button>
+                <button class="nav-btn" onclick="showSection('profile')">프로필</button>
+                <button class="nav-btn logout" onclick="logout()">로그아웃</button>
+            </nav>
+        </header>
+
+        <!-- Login Section -->
+        <section id="login-section" class="section active">
+            <div class="login-container">
+                <h2>🔐 로그인</h2>
+                <p>한컴 국방부 학습관리시스템에 오신 것을 환영합니다</p>
+                <form id="login-form" onsubmit="login(event)">
+                    <div class="form-group">
+                        <label for="username">사용자 ID:</label>
+                        <input type="text" id="username" name="username" required placeholder="군번 또는 교관ID">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">비밀번호:</label>
+                        <input type="password" id="password" name="password" required placeholder="비밀번호 입력">
+                    </div>
+                    <div class="form-group">
+                        <label for="user-type">사용자 구분:</label>
+                        <select id="user-type" name="user-type" required>
+                            <option value="">선택하세요</option>
+                            <option value="student">학생 (병사)</option>
+                            <option value="instructor">교관</option>
+                            <option value="admin">관리자</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">로그인</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="section">
+            <h2>📊 대시보드</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>진행 중인 교육</h3>
+                    <div class="stat-number">5</div>
+                    <p>활성 과정</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>등록 학생</h3>
+                    <div class="stat-number">245</div>
+                    <p>현재 수강생</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>완료율</h3>
+                    <div class="stat-number">78%</div>
+                    <p>평균 완료율</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>교관 현황</h3>
+                    <div class="stat-number">12</div>
+                    <p>배정 교관</p>
+                </div>
+            </div>
+            <div class="recent-activity">
+                <h3>최근 활동</h3>
+                <ul class="activity-list">
+                    <li>2025-11-12: 군사훈련 기본과정 - 15명 신규 등록</li>
+                    <li>2025-11-11: 통신보안 교육 - 과정 완료</li>
+                    <li>2025-11-10: 전술훈련 교육 - 신규 과정 개설</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Courses Section -->
+        <section id="courses-section" class="section">
+            <h2>📚 교육과정 관리</h2>
+            <button class="btn-primary" onclick="addNewCourse()">➕ 신규 과정 추가</button>
+            <div class="courses-grid">
+                <div class="course-card">
+                    <h3>군사훈련 기본과정</h3>
+                    <p class="course-code">과정코드: MND-001</p>
+                    <p class="course-desc">기본 군사훈련 및 체력단련 과정</p>
+                    <div class="course-info">
+                        <span>기간: 4주</span>
+                        <span>수강생: 85명</span>
+                    </div>
+                    <button class="btn-secondary">상세보기</button>
+                </div>
+                <div class="course-card">
+                    <h3>통신보안 교육</h3>
+                    <p class="course-code">과정코드: MND-002</p>
+                    <p class="course-desc">군사통신 보안 및 암호화 기술</p>
+                    <div class="course-info">
+                        <span>기간: 2주</span>
+                        <span>수강생: 45명</span>
+                    </div>
+                    <button class="btn-secondary">상세보기</button>
+                </div>
+                <div class="course-card">
+                    <h3>전술훈련 교육</h3>
+                    <p class="course-code">과정코드: MND-003</p>
+                    <p class="course-desc">전술적 사고 및 작전 수행 능력 배양</p>
+                    <div class="course-info">
+                        <span>기간: 6주</span>
+                        <span>수강생: 60명</span>
+                    </div>
+                    <button class="btn-secondary">상세보기</button>
+                </div>
+                <div class="course-card">
+                    <h3>응급처치 및 구급</h3>
+                    <p class="course-code">과정코드: MND-004</p>
+                    <p class="course-desc">전장 응급처치 및 부상자 구급 훈련</p>
+                    <div class="course-info">
+                        <span>기간: 3주</span>
+                        <span>수강생: 35명</span>
+                    </div>
+                    <button class="btn-secondary">상세보기</button>
+                </div>
+                <div class="course-card">
+                    <h3>사이버전 대응</h3>
+                    <p class="course-code">과정코드: MND-005</p>
+                    <p class="course-desc">사이버 공격 및 방어 전략 교육</p>
+                    <div class="course-info">
+                        <span>기간: 8주</span>
+                        <span>수강생: 20명</span>
+                    </div>
+                    <button class="btn-secondary">상세보기</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Students Section -->
+        <section id="students-section" class="section">
+            <h2>👥 학생 관리</h2>
+            <button class="btn-primary" onclick="addNewStudent()">➕ 학생 추가</button>
+            <div class="search-box">
+                <input type="text" placeholder="학생 검색 (이름, 군번)" onkeyup="searchStudents(this.value)">
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>군번</th>
+                        <th>이름</th>
+                        <th>계급</th>
+                        <th>소속부대</th>
+                        <th>수강과정</th>
+                        <th>진도율</th>
+                        <th>관리</th>
+                    </tr>
+                </thead>
+                <tbody id="students-table-body">
+                    <tr>
+                        <td>20250001</td>
+                        <td>김병장</td>
+                        <td>병장</td>
+                        <td>제1사단</td>
+                        <td>군사훈련 기본과정</td>
+                        <td><span class="progress-bar"><span class="progress-fill" style="width: 85%">85%</span></span></td>
+                        <td><button class="btn-small">상세</button></td>
+                    </tr>
+                    <tr>
+                        <td>20250002</td>
+                        <td>이상병</td>
+                        <td>상병</td>
+                        <td>제2사단</td>
+                        <td>통신보안 교육</td>
+                        <td><span class="progress-bar"><span class="progress-fill" style="width: 65%">65%</span></span></td>
+                        <td><button class="btn-small">상세</button></td>
+                    </tr>
+                    <tr>
+                        <td>20250003</td>
+                        <td>박일병</td>
+                        <td>일병</td>
+                        <td>제3사단</td>
+                        <td>전술훈련 교육</td>
+                        <td><span class="progress-bar"><span class="progress-fill" style="width: 40%">40%</span></span></td>
+                        <td><button class="btn-small">상세</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Instructors Section -->
+        <section id="instructors-section" class="section">
+            <h2>👨‍🏫 교관 관리</h2>
+            <button class="btn-primary" onclick="addNewInstructor()">➕ 교관 추가</button>
+            <div class="instructors-grid">
+                <div class="instructor-card">
+                    <div class="instructor-avatar">👨‍✈️</div>
+                    <h3>최대위</h3>
+                    <p class="instructor-rank">대위 / 교관ID: INS-001</p>
+                    <p class="instructor-specialty">전문분야: 군사훈련</p>
+                    <p class="instructor-courses">담당과정: 3개</p>
+                    <button class="btn-secondary">상세보기</button>
+                </div>
+                <div class="instructor-card">
+                    <div class="instructor-avatar">👨‍💼</div>
+                    <h3>정중위</h3>
+                    <p class="instructor-rank">중위 / 교관ID: INS-002</p>
+                    <p class="instructor-specialty">전문분야: 통신보안</p>
+                    <p class="instructor-courses">담당과정: 2개</p>
+                    <button class="btn-secondary">상세보기</button>
+                </div>
+                <div class="instructor-card">
+                    <div class="instructor-avatar">👩‍✈️</div>
+                    <h3>강소령</h3>
+                    <p class="instructor-rank">소령 / 교관ID: INS-003</p>
+                    <p class="instructor-specialty">전문분야: 전술훈련</p>
+                    <p class="instructor-courses">담당과정: 4개</p>
+                    <button class="btn-secondary">상세보기</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile-section" class="section">
+            <h2>👤 프로필 정보</h2>
+            <div class="profile-container">
+                <div class="profile-avatar">👤</div>
+                <div class="profile-info">
+                    <h3 id="profile-name">사용자 이름</h3>
+                    <p id="profile-type">사용자 구분</p>
+                    <p id="profile-id">ID: </p>
+                </div>
+                <div class="profile-details">
+                    <h4>계정 정보</h4>
+                    <p>등록일: 2025-01-15</p>
+                    <p>마지막 로그인: 2025-11-12 09:30</p>
+                    <button class="btn-secondary">비밀번호 변경</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 한컴 (Hancom). All rights reserved. | 국방부 학습관리시스템 (Ministry of National Defense LMS)</p>
+        </footer>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
