@@ -10,10 +10,10 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, Sp
 from apps.common.views import home_view, api_info
 from apps.common.frontend_views import frontend_login, frontend_dashboard, frontend_courses, frontend_profile, frontend_my_courses
 
-# Admin site 한글화
-admin.site.site_header = "국방부 학습관리시스템 관리"
-admin.site.site_title = "국방부 LMS 관리"
-admin.site.index_title = "관리 대시보드"
+# Admin site configuration
+admin.site.site_header = "Ministry of Defense LMS Administration"
+admin.site.site_title = "MND LMS Admin"
+admin.site.index_title = "Administration Dashboard"
 
 urlpatterns = [
     # Home page
@@ -36,11 +36,11 @@ urlpatterns = [
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     
     # API endpoints
-    path('api/auth/', include('apps.authentication.urls')),
-    path('api/courses/', include('apps.courses.urls')),
-    path('api/enrollments/', include('apps.enrollments.urls')),
-    path('api/notices/', include('apps.notices.urls')),
-    path('api/qna/', include('apps.qna.urls')),
+    # path('api/auth/', include('apps.authentication.urls')),
+    # path('api/courses/', include('apps.courses.urls')),
+    # path('api/enrollments/', include('apps.enrollments.urls')),
+    # path('api/notices/', include('apps.notices.urls')),
+    # path('api/qna/', include('apps.qna.urls')),
     
 
 ]
@@ -51,7 +51,7 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     
     # Debug toolbar
-    import debug_toolbar
-    urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+    # import debug_toolbar
+    # urlpatterns = [
+    #     path('__debug__/', include(debug_toolbar.urls)),
+    # ] + urlpatterns
