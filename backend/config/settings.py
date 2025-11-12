@@ -37,16 +37,16 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     'django_filters',
     'drf_spectacular',
-    'django_celery_beat',
-    'django_celery_results',
+    # 'django_celery_beat',
+    # 'django_celery_results',
 ]
 
 LOCAL_APPS = [
     'apps.authentication',
-    'apps.courses',
-    'apps.enrollments',
-    'apps.notices',
-    'apps.qna',
+    # 'apps.courses',
+    # 'apps.enrollments',
+    # 'apps.notices',
+    # 'apps.qna',
     'apps.common',
 ]
 
@@ -405,8 +405,8 @@ DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='noreply@hancom-lms.co
 
 # Development settings
 if DEBUG:
-    INSTALLED_APPS += ['debug_toolbar']
-    MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    # INSTALLED_APPS += ['debug_toolbar']
+    # MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
     INTERNAL_IPS = ['127.0.0.1', 'localhost']
     
 # Static files (CSS, JavaScript, Images)
