@@ -1,0 +1,42 @@
+{
+  "system": {
+    "name": "한컴 국방부 교육 시스템",
+    "version": "1.0.0",
+    "description": "Hancom Defense Ministry Education LMS",
+    "contact": {
+      "organization": "한컴(Hancom)",
+      "department": "국방사업부",
+      "email": "defense-edu@hancom.com",
+      "phone": "02-1234-5678"
+    }
+  },
+  "features": {
+    "authentication": true,
+    "courseManagement": true,
+    "progressTracking": true,
+    "assessments": true,
+    "certificates": true,
+    "analytics": true,
+    "mobileSupport": true
+  },
+  "security": {
+    "encryption": "AES-256",
+    "sessionTimeout": 1800,
+    "passwordPolicy": {
+      "minLength": 10,
+      "requireUppercase": true,
+      "requireLowercase": true,
+      "requireNumbers": true,
+      "requireSpecialChars": true
+    },
+    "twoFactorAuth": true,
+    "ipWhitelist": true
+  },
+  "settings": {
+    "language": "ko",
+    "timezone": "Asia/Seoul",
+    "dateFormat": "YYYY-MM-DD",
+    "maxFileUploadSize": "50MB",
+    "supportedFormats": ["pdf", "docx", "pptx", "mp4", "zip"]
+  }
+}
