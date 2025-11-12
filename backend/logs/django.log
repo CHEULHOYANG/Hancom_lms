@@ -2565,3 +2565,9 @@ INFO 2025-11-12 23:29:34,367 autoreload 11032 13480 Watching for file changes wi
 INFO 2025-11-12 23:29:34,369 autoreload 10492 5308 Watching for file changes with StatReloader
 INFO 2025-11-12 23:29:37,073 autoreload 22188 10236 Watching for file changes with StatReloader
 INFO 2025-11-12 23:30:09,098 autoreload 12560 20240 Watching for file changes with StatReloader
+INFO 2025-11-12 23:47:11,070 autoreload 8148 18900 Watching for file changes with StatReloader
+INFO 2025-11-12 23:47:42,740 autoreload 8148 18900 E:\Hancom_lms\backend\apps\courses\models.py changed, reloading.
+INFO 2025-11-12 23:47:43,191 autoreload 24752 28056 Watching for file changes with StatReloader
+INFO 2025-11-12 23:48:02,648 autoreload 24752 28056 E:\Hancom_lms\backend\config\settings.py changed, reloading.
+INFO 2025-11-12 23:48:03,137 autoreload 24620 25288 Watching for file changes with StatReloader
+INFO 2025-11-12 23:50:45,306 autoreload 22080 19548 Watching for file changes with StatReloader

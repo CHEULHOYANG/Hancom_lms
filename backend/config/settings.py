@@ -42,11 +42,11 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    # 'apps.authentication',
-    # 'apps.courses',
-    # 'apps.enrollments',
-    # 'apps.notices',
-    # 'apps.qna',
+    'apps.authentication',
+    'apps.courses',
+    'apps.enrollments',
+    'apps.notices',
+    'apps.qna',
     'apps.common',
 ]
 
@@ -179,7 +179,7 @@ PASSWORD_HASHERS = [
 ]
 
 # Custom User Model
-# AUTH_USER_MODEL = 'authentication.User'
+AUTH_USER_MODEL = 'authentication.User'
 
 # Internationalization
 LANGUAGE_CODE = 'ko-kr'
