@@ -3,30 +3,26 @@ from .models import CourseCategory, Course, CourseSection, Lesson, CourseReview
 
 @admin.register(CourseCategory)
 class CourseCategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'parent', 'sort_order']
-    list_filter = ['parent']
-    search_fields = ['name']
+    list_display = ["name", "created_at"]
+    search_fields = ["name", "description"]
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'instructor', 'is_published']
-    list_filter = ['category', 'is_published']
-    search_fields = ['title']
+    list_display = ["title", "instructor", "category", "price", "is_free", "created_at"]
+    list_filter = ["is_free", "category"]
+    search_fields = ["title", "description"]
 
 @admin.register(CourseSection)
 class CourseSectionAdmin(admin.ModelAdmin):
-    list_display = ['title', 'course', 'sort_order']
-    list_filter = ['course']
-    search_fields = ['title']
+    list_display = ["course", "title", "order"]
+    list_filter = ["course"]
 
 @admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
-    list_display = ['title', 'section', 'lesson_type']
-    list_filter = ['lesson_type', 'section__course']
-    search_fields = ['title']
+    list_display = ["section", "title", "order"]
+    search_fields = ["title", "content"]
 
 @admin.register(CourseReview)
 class CourseReviewAdmin(admin.ModelAdmin):
-    list_display = ['course', 'user', 'rating']
-    list_filter = ['rating', 'course']
-    search_fields = ['title']
+    list_display = ["course", "user", "rating", "created_at"]
+    list_filter = ["rating"]
