@@ -1,0 +1,113 @@
+{
+  "courses": [
+    {
+      "id": "course-001",
+      "title": "정보보안 기초",
+      "description": "국방 정보보안의 기본 원칙과 실무",
+      "duration": "4주",
+      "category": "보안",
+      "level": "초급",
+      "instructor": "김보안",
+      "modules": [
+        {
+          "id": "module-001",
+          "title": "정보보안 개요",
+          "lessons": ["정보보안의 중요성", "보안 3요소", "국방 정보보안 정책"]
+        },
+        {
+          "id": "module-002",
+          "title": "암호화 기초",
+          "lessons": ["대칭키 암호화", "비대칭키 암호화", "해시 함수"]
+        },
+        {
+          "id": "module-003",
+          "title": "접근제어",
+          "lessons": ["인증과 인가", "접근제어 모델", "실무 적용"]
+        },
+        {
+          "id": "module-004",
+          "title": "보안 정책 수립",
+          "lessons": ["정책 수립 절차", "위험 분석", "보안 감사"]
+        }
+      ]
+    },
+    {
+      "id": "course-002",
+      "title": "사이버 방어",
+      "description": "사이버 위협 대응 및 방어 전략",
+      "duration": "6주",
+      "category": "사이버보안",
+      "level": "중급",
+      "instructor": "이사이버",
+      "modules": [
+        {
+          "id": "module-005",
+          "title": "사이버 위협 분석",
+          "lessons": ["최신 위협 동향", "APT 공격", "악성코드 분석"]
+        },
+        {
+          "id": "module-006",
+          "title": "침입 탐지 시스템",
+          "lessons": ["IDS/IPS 개요", "시그니처 기반 탐지", "행위 기반 탐지"]
+        },
+        {
+          "id": "module-007",
+          "title": "사고 대응",
+          "lessons": ["사고 대응 절차", "포렌식 분석", "복구 전략"]
+        }
+      ]
+    },
+    {
+      "id": "course-003",
+      "title": "군사 지휘체계",
+      "description": "현대 군사 지휘체계의 이해와 운용",
+      "duration": "8주",
+      "category": "지휘통제",
+      "level": "고급",
+      "instructor": "박지휘",
+      "modules": [
+        {
+          "id": "module-008",
+          "title": "지휘체계 개론",
+          "lessons": ["지휘체계 구조", "C4I 시스템", "작전 계획"]
+        },
+        {
+          "id": "module-009",
+          "title": "통합 지휘통제",
+          "lessons": ["통합 운용 개념", "합동 작전", "통신 체계"]
+        },
+        {
+          "id": "module-010",
+          "title": "의사결정 지원",
+          "lessons": ["상황 분석", "전술 의사결정", "시뮬레이션"]
+        }
+      ]
+    },
+    {
+      "id": "course-004",
+      "title": "국방 IT 시스템",
+      "description": "국방 정보시스템 구축 및 관리",
+      "duration": "5주",
+      "category": "IT관리",
+      "level": "중급",
+      "instructor": "최시스템",
+      "modules": [
+        {
+          "id": "module-011",
+          "title": "국방 IT 아키텍처",
+          "lessons": ["시스템 설계", "통합 프레임워크", "표준화"]
+        },
+        {
+          "id": "module-012",
+          "title": "시스템 운영",
+          "lessons": ["배포 전략", "모니터링", "유지보수"]
+        },
+        {
+          "id": "module-013",
+          "title": "클라우드 환경",
+          "lessons": ["국방 클라우드", "가상화 기술", "보안 고려사항"]
+        }
+      ]
+    }
+  ]
+}
